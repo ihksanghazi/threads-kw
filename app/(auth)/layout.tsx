@@ -5,6 +5,9 @@ import "../globals.css";
 export const metadata = {
 	title: "Threads KW",
 	description: "Threads KW Ihksan Ghazi",
+	icons: {
+		icon: "/logo.svg",
+	},
 };
 
 const inter = Inter({ subsets: ["latin"] });
