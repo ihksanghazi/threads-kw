@@ -36,6 +36,8 @@ interface Props {
 }
 
 const AccountProfile = ({ user, btnTitle }: Props) => {
+	const [isLoading, setIsLoading] = useState(false);
+
 	const [files, setFiles] = useState<File[]>([]);
 	const { startUpload } = useUploadThing("media");
 	const router = useRouter();
@@ -77,6 +79,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
 	};
 
 	const onSubmit = async (values: z.infer<typeof UserValidation>) => {
+		setIsLoading(true);
 		const blob = values.profile_photo;
 
 		const hasImageChanged = isBase64Image(blob);
@@ -208,7 +211,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
 						</FormItem>
 					)}
 				/>
-				<Button type="submit" className="bg-primary-500">
+				<Button disabled={isLoading} type="submit" className="bg-primary-500">
 					Submit
 				</Button>
 			</form>

@@ -18,6 +18,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { CommentValidation } from "@/lib/validations/thread";
 import Image from "next/image";
 import { addCommentToThread } from "@/lib/actions/thread.action";
+import { useState } from "react";
 // import { createThread } from "@/lib/actions/thread.action";
 
 interface Props {
@@ -27,6 +28,8 @@ interface Props {
 }
 
 const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
+	const [isLoading, setIsLoading] = useState(false);
+
 	const router = useRouter();
 	const pathname = usePathname();
 
@@ -38,6 +41,8 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
 	});
 
 	const onSubmit = async (values: z.infer<typeof CommentValidation>) => {
+		setIsLoading(true);
+
 		await addCommentToThread(
 			threadId,
 			values.thread,
@@ -46,6 +51,8 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
 		);
 
 		form.reset();
+
+		setIsLoading(false);
 	};
 	return (
 		<Form {...form}>
@@ -76,7 +83,7 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
 					)}
 				/>
 
-				<Button type="submit" className="comment-form_btn">
+				<Button disabled={isLoading} type="submit" className="comment-form_btn">
 					Reply
 				</Button>
 			</form>

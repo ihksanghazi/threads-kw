@@ -19,6 +19,7 @@ import { usePathname, useRouter } from "next/navigation";
 // import { updateUser } from "@/lib/actions/user.actions";
 import { ThreadValidation } from "@/lib/validations/thread";
 import { createThread } from "@/lib/actions/thread.action";
+import { useState } from "react";
 
 interface Props {
 	user: {
@@ -33,6 +34,8 @@ interface Props {
 }
 
 function PostThread({ userId }: { userId: string }) {
+	const [isLoading, setIsLoading] = useState(false);
+
 	const router = useRouter();
 	const pathname = usePathname();
 
@@ -45,6 +48,8 @@ function PostThread({ userId }: { userId: string }) {
 	});
 
 	const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {
+		setIsLoading(true);
+
 		await createThread({
 			text: values.thread,
 			author: userId,
@@ -75,7 +80,7 @@ function PostThread({ userId }: { userId: string }) {
 					)}
 				/>
 
-				<Button type="submit" className="bg-primary-500">
+				<Button disabled={isLoading} type="submit" className="bg-primary-500">
 					Post Thread
 				</Button>
 			</form>
